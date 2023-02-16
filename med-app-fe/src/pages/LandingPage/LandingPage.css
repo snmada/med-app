@@ -1,0 +1,77 @@
+.container{
+    width: 100%;
+    height: 100vh;
+    background: rgb(248,220,129);
+    background: linear-gradient(50deg, rgba(248,220,129,0.5467436974789917) 30%, rgba(162,208,193,0.5467436974789917) 53%);
+}
+
+.login-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #191919;
+    border-right: none;
+    border-left: none;
+    padding: 5px 40px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-button:hover{
+    color: #FFFFFF;
+    background-color: #344D67;
+    border: none;
+}
+
+.icon{
+    margin-right: 10px;
+}
+
+.register-button{
+    background-color: transparent;
+    font-size: 16px;
+    padding: 12px 80px;
+    cursor: pointer;
+    border: 1px solid #191919;
+    position: relative;
+}
+
+.register-button::after{
+    content: "";
+    background-color: #8ec3b2;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    top: 10px;
+    left: 10px;
+    position: absolute;
+}
+
+.register-button:hover::after{
+    top: 0px;
+    left: 0px;
+}
+
+.headline{
+    font-family: 'Unbounded', cursive;
+    font-size: 37px;
+    font-weight: 200;
+    margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 899px){
+    .headline{ 
+        font-size: 25px;
+    }
+}
+
+@media only screen and (min-width: 900px){
+    .headline{ 
+        font-size: 37px;
+    }
+}
+
+.medical-record{
+    object-fit: cover;  
+    pointer-events: none;
+}
