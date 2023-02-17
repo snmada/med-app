@@ -7,7 +7,8 @@
 }
 
 body,
-button{
+button, 
+form{
   color: #191919;
   font-family: 'Poppins', sans-serif;
 }
