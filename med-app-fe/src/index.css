@@ -12,3 +12,13 @@ form{
   color: #191919;
   font-family: 'Poppins', sans-serif;
 }
+
+.error{
+  color: #f52a2a;
+  padding: 1px;
+}
+
+.description{
+  background: #F5F5F5;
+  padding: 3px;
+}
