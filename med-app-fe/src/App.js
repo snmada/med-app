@@ -5,6 +5,7 @@ import SignIn from './pages/SignIn/SignIn.js'
 import PatientList from './pages/Patient/PatientList/PatientList.js'
 import NewPatientRegistration from './pages/Patient/NewPatientRegistration/NewPatientRegistration.js'
 import PatientProfile from './pages/Patient/PatientProfile/PatientProfile.js'
+import CreateMedicalRecord from './pages/MedicalRecord/CreateMedicalRecord/CreateMedicalRecord.js'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               <Route exact path="/patients" element={<PatientList/>}/>
               <Route exact path="/patients/add" element={<NewPatientRegistration/>}/> 
               <Route exact path="/patients/profile" element={<PatientProfile/>}/>
+              <Route exact path="/patients/new-medical-record" element={<CreateMedicalRecord/>}/>
           </Routes>
       </BrowserRouter>
     </>
