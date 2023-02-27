@@ -5,7 +5,8 @@ import {Grid, Paper, Typography, TextField, Autocomplete, InputAdornment, FormCo
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
-import "./NewPatientRegistration.css"
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 
 const initialState = {firstName: "", lastName: "", cnp: "", dateOfBirth: "", age: "", gender: "", occupation: "", street: "", buildingNumber: "", floor: "",
     appartment: "", city: "", county: "", phoneNumber: "", email: "", weight: "", height: "", bloodGroup: "", rhFactor: "", allergies: ""}
@@ -98,10 +99,10 @@ function NewPatientRegistration() {
     <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container sx={{background: 'white', py: 6}}>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <Paper elevation={20} sx={{width: { xs: '500px', sm: '850px'}, padding:'45px 50px'}}>
+                <Paper elevation={20} sx={{width: {xs: '500px', sm: '850px'}, padding:'45px 50px'}}>
                     <Grid container>
-                        <Grid item xs={12} px={1} style={{marginBottom: '25px'}}>
-                            <Typography sx={{fontSize: '22px'}}>New Patient</Typography>
+                        <Grid item xs={12} px={1} style={{marginBottom: '25px', background: '#34626C', display: 'flex', justifyContent: 'center'}}>
+                            <Typography sx={{fontSize: '22px', color: '#FBFBFB', p: 2}}>New Patient Registration</Typography>
                         </Grid>
                         <Grid item xs={12} px={1}>
                             <Typography className="description">Personal Information</Typography>
@@ -247,8 +248,8 @@ function NewPatientRegistration() {
                         </Grid>
                         <Grid item xs={12} p={1}>
                             <Box display='flex' justifyContent='flex-end' sx={{background: 'transparent'}}>
-                                <Button variant="contained" color="primary" sx={{mr: 2}} type="submit">SAVE</Button>
-                                <Button variant="contained" sx={{background: '#86A3B8'}} onClick={() => {navigate("/")}}>CANCEL</Button>
+                                <Button variant="contained" sx={{mr: 2, background: '#00917C'}} type="submit"><SaveIcon sx={{mr: 1}}/>SAVE</Button>
+                                <Button variant="contained" sx={{background: '#F05454'}} onClick={() => {navigate("/patients")}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
                             </Box>
                         </Grid>
                     </Grid>

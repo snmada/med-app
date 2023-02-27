@@ -46,37 +46,39 @@ function SignUp() {
     }
 
   return (
-    <Grid container className="background">
-        <Grid item>
-            <Paper elevation={0} sx={{background: 'transparent', width: '500px', padding: '0px 60px'}}>
-                <Box py={3} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <Typography sx={{fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', cursor: 'pointer'}} onClick={() => {navigate("/")}}>MED</Typography>
-                </Box>
-                <Box py={1}>
-                    <Stepper activeStep={step} alternativeLabel>
-                        {steps.map((label) => (
-                            <Step key={label}
-                                sx={{
-                                    '& .MuiStepLabel-root .Mui-completed': {
-                                        color: '#8EC3B2', 
-                                    },
-                                    '& .MuiStepLabel-root .Mui-active': {
-                                        color: '#F9D97D', 
-                                    },
-                                    '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
-                                        fill: 'black', 
-                                    },
-                                }}
-                            >
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                </Box>
-                {handleForm()}
-            </Paper>
+    <div className="signup-container">
+        <Grid container className="rounded-container">
+            <Grid item>
+                <Paper elevation={0} sx={{background: 'transparent', width: '500px', padding: '0px 60px'}}>
+                    <Box pb={3} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <Typography sx={{fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', cursor: 'pointer'}} onClick={() => {navigate("/")}}>MED</Typography>
+                    </Box>
+                    <Box py={1}>
+                        <Stepper activeStep={step} alternativeLabel>
+                            {steps.map((label) => (
+                                <Step key={label}
+                                    sx={{
+                                        '& .MuiStepLabel-root .Mui-completed': {
+                                            color: '#8EC3B2', 
+                                        },
+                                        '& .MuiStepLabel-root .Mui-active': {
+                                            color: '#F9D97D', 
+                                        },
+                                        '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                                            fill: 'black', 
+                                        },
+                                    }}
+                                >
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    </Box>
+                    {handleForm()}
+                </Paper>
+            </Grid>
         </Grid>
-    </Grid>
+    </div>
   )
 }
 

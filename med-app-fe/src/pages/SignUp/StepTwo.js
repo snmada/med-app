@@ -28,10 +28,10 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
             </Grid>
             <Grid item xs={12} py={1}>
                 <TextField {...register("uid")} required value={formData.uid} name="uid" type="text" label="UID" variant="outlined" onChange={handleChange} fullWidth/>
-                <Typography  className="error">{errors.uid?.message}</Typography>
+                <Typography className="error">{errors.uid?.message}</Typography>
             </Grid>
             <Grid item xs={12} pt={2} pb={7}>
-                <Typography  style={{fontSize: '14px', color: '#9d9d9d'}}>Note: Enter your doctor UID (Unique Identifier) to prove that you are part of healthcare system. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
+                <Typography sx={{fontSize: '14px', color: '#9d9d9d'}}>Note: Enter your doctor UID (Unique Identifier) to prove that you are part of healthcare system. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
             </Grid>
             <Grid item xs={6} py={2}>
                 <Box xs={6} className="back">

@@ -1,9 +1,12 @@
 import {React} from 'react'
+import {useNavigate} from 'react-router-dom'
 import NavBar  from "../../../components/NavBar/NavBar.js"
 import {Grid, Paper, Typography, TextField, TextareaAutosize, Box, Button} from '@mui/material'
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 
 function CreateMedicalRecord() {
-
+    const navigate = useNavigate();
     const date = () => {
         if(new Date().getDate() < 10 && new Date().getMonth()+1 < 10){
             return new "0" + Date().getDate()+"/0"+(new Date().getMonth()+1)+"/"+new Date().getFullYear();
@@ -23,16 +26,16 @@ function CreateMedicalRecord() {
     <>
     <NavBar/>
     <form>
-        <Grid container>
+        <Grid container py={6}>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px'}}>
                 <Paper elevation={20} sx={{width: '850px', padding: '45px 50px'}}>
                     <Grid container>
-                        <Grid item xs={12} sx={{marginBottom: '25px'}}>
-                            <Typography sx={{fontSize: '25px'}}>New Medical Record</Typography>
+                        <Grid item xs={12} px={1} style={{marginBottom: '25px', background: '#34626C', display: 'flex', justifyContent: 'center'}}>
+                            <Typography sx={{fontSize: '22px', color: '#FBFBFB', p: 2}}>New Medical Record</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography py={1} sx={{fontSize: '18px'}}>Name</Typography>
-                            <Typography sx={{fontSize: '18px'}}>CNP</Typography>
+                            <Typography py={1} sx={{fontSize: '25px'}}></Typography>
+                            <Typography sx={{fontSize: '18px'}}></Typography>
                         </Grid>
                         <Grid item xs={12} py={3} px={0}>
                             <TextField size="small" label="Date" variant="filled" disabled defaultValue={date()} />
@@ -61,9 +64,9 @@ function CreateMedicalRecord() {
                     </Grid>
                     <Grid container py={2}>
                         <Grid item xs={12} p={1}>
-                            <Box display='flex' justifyContent='flex-end'>
-                                <Button variant="contained" color="primary" sx={{mr: 2}}>SAVE</Button>
-                                <Button variant="contained" sx={{background: '#86A3B8'}}>CANCEL</Button>
+                            <Box display='flex' justifyContent='flex-end' sx={{background: 'transparent'}}>
+                                <Button variant="contained" sx={{mr: 2, background: '#00917C'}} type="submit"><SaveIcon sx={{mr: 1}}/>SAVE</Button>
+                                <Button variant="contained" sx={{background: '#F05454'}} onClick={() => {navigate("/patients/profile")}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
                             </Box>
                         </Grid>
                     </Grid>
