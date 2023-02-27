@@ -1,7 +1,6 @@
 import {React, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {Grid, Box, Fab, Button} from '@mui/material'
-import AddIcon from '@mui/icons-material/Add'
+import {Grid, Box, Button} from '@mui/material'
 import {DataGrid, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton} from '@mui/x-data-grid'
 import NavBar from '../../../components/NavBar/NavBar.js'
 
@@ -14,7 +13,7 @@ function PatientList() {
         {field: 'view', headerName: 'Profile', width: 110, sortable: false, filterable: false, hideable: false,
             renderCell: (cellValues) => {
                 return (
-                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black'}} size="small" onClick={()=> {navigate("/patients/profile/"+cellValues.id)}}>View</Button>
+                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black', "&:hover":{color: '#FBFBFB'}}} size="small" onClick={() => {navigate("/patients/profile")}}>View</Button>
                 )
             }
         },
@@ -41,9 +40,7 @@ function PatientList() {
     <Grid container sx={{px: {xs: 2, md: 8}, display: 'block', py: 3}}>
         <Grid item py={3}>
             <Box display='flex' justifyContent='flex-end'>
-                <Fab variant="extended" elevation={0} sx={{background: '#a2d0c1', "&:hover":{background: '#3F979B', color: '#FFFFFF'}}} size="medium" onClick={()=>{navigate("/patients/add")}}>
-                    <AddIcon /> ADD NEW PATIENT
-                </Fab>
+                <button style={{border: 'none', fontSize: '18px', padding: '5px 30px', cursor: 'pointer', background: '#AAD8D3'}} onClick={() => {navigate("/patients/add")}}> + New Patient</button>
             </Box>
         </Grid>
         <Grid item>

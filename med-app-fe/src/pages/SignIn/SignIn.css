@@ -1,9 +1,33 @@
-.background{
+.signin-container{
     width: 100%;
     height: 100vh; 
+    padding-left: 200px;
+    padding-right: 200px;
+    background: rgb(255,244,207);
+    background: radial-gradient(circle, rgba(255,244,207,1) 15%, rgba(204,230,222,1) 100%);
+}
+
+.signin-container .rounded-container{
+    width: 100%;
+    height: 100vh; 
+    border-radius: 40% 0% 40% 0%;
     display: flex; 
     justify-content: center;
     align-items: center;
+    background: #FBFBFB;
+}
+
+@media only screen and (max-width: 1199px){
+    .signin-container{ 
+        background: #FBFBFB;
+    }
+}
+
+@media only screen and (min-width: 1200px){
+    .signin-container{ 
+        background: rgb(255,244,207);
+        background: radial-gradient(circle, rgba(255,244,207,1) 15%, rgba(204,230,222,1) 100%);
+    }
 }
 
 .box{
@@ -11,11 +35,6 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
-}
-
-.error{
-    color: #f52a2a;
-    padding: 1px;
 }
 
 .submit-button{
@@ -26,8 +45,3 @@
     border: none;
     width: 100%;
 } 
-
-input[type=password]::-ms-reveal,
-input[type=password]::-ms-clear{
-    display: none;
-}

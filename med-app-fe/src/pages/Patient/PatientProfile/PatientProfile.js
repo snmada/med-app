@@ -1,7 +1,7 @@
 import {React, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import NavBar  from "../../../components/NavBar/NavBar.js"
-import {Grid, Paper, TextField, Typography, Box, Button, Fab, InputAdornment, FormControl, InputLabel, Select, MenuItem, Accordion, AccordionSummary, AccordionDetails, Autocomplete, createFilterOptions} from '@mui/material'
+import {Grid, Paper, TextField, Typography, Box, Button, Fab, InputAdornment, FormControl, InputLabel, Select, MenuItem, Accordion, AccordionSummary, AccordionDetails, Autocomplete, createFilterOptions, Tooltip, IconButton} from '@mui/material'
 import {DataGrid} from '@mui/x-data-grid'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AddIcon from '@mui/icons-material/Add'
@@ -9,6 +9,8 @@ import EditIcon from '@mui/icons-material/Edit'
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 
 function PatientProfile() {
     const navigate = useNavigate();
@@ -89,7 +91,7 @@ function PatientProfile() {
         {field: 'view', headerName: 'Medical Record', width: 130, sortable: false, filterable: false,
             renderCell: (cellValues) => {
                 return (
-                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black'}} onClick={()=>{navigate("/medicalrecord")}}>View</Button>
+                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black', "&:hover":{background: '#5B8FB9', color: '#FFFFFF'}}} onClick={() => {navigate("/patients/view-medical-record")}}>View</Button>
                 )
             },
         },
@@ -114,24 +116,19 @@ function PatientProfile() {
         <Grid container py={5}>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px'}}>
                 <Paper elevation={0} sx={{width: {xs: '500px', sm: '1150px'}, padding:'0px 50px'}}>
-                    <Grid item xs={12} p={1}>
-                        {editMode?
-                            (
+                    {editMode &&
+                        <Grid container sx={{background: '#F1FCFC', p: 1, mb: 3, borderRadius: '5px'}}>
+                            <Grid item xs={6} p={1}>
+                                <Typography sx={{fontSize: '22px'}}>Edit mode</Typography>
+                            </Grid>
+                            <Grid item xs={6} p={1}>
                                 <Box display='flex' justifyContent='flex-end'>
-                                    <Button type="submit" variant="contained" sx={{mr: 2}} color="primary">SAVE</Button>
-                                    <Button variant="contained" color="primary" sx={{background: '#86A3B8'}} onClick={() => {setEditMode(false)}}>CANCEL</Button>
+                                    <Button type="submit" variant="contained"  sx={{mr: 2, background: '#00917C'}}><SaveIcon sx={{mr: 1}}/>SAVE</Button>
+                                    <Button variant="contained" color="primary" sx={{background: '#F05454'}} onClick={() => {setEditMode(false)}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
                                 </Box>
-                            )
-                            :
-                            (
-                                <Box display='flex' justifyContent='flex-end'>
-                                    <Fab sx={{background: '#a2d0c1'}} size="small" onClick={() => {setEditMode(!editMode)}}>
-                                        <EditIcon />
-                                    </Fab>
-                                </Box>
-                            )
-                        }
-                    </Grid>
+                            </Grid>
+                        </Grid>
+                    }
                     <Grid container sx={{background: '#FFFFFF', display: 'flex', py:1}}>
                         {
                             editMode? (
@@ -147,8 +144,15 @@ function PatientProfile() {
                                 </>
                             ):
                             (
-                                <Grid item xs={12} md={6} p={1}>
-                                    <Typography sx={{fontSize: '25px'}}>{data.lastName} {data.firstName}</Typography>
+                                <Grid item xs={12} md={6} px={1} pb={4} sx={{display: 'flex'}}>
+                                    <Typography sx={{fontSize: '27px'}}>{data.lastName} {data.firstName}</Typography>
+                                    <Box sx={{ml: 3}}>
+                                        <Tooltip title="Edit patient data">
+                                            <IconButton onClick={() => {setEditMode(!editMode)}}>
+                                                <EditIcon sx={{color: '#9F73AB', fontSize: '27px'}}/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Box>
                                 </Grid>
                             )
                         }
@@ -341,17 +345,17 @@ function PatientProfile() {
                                 }
                             </AccordionDetails>
                         </Accordion>
-                    </Grid>
-                    <Grid container pt={2} sx={{background: '#FFFFFF'}}>
                         <Accordion defaultExpanded={true} sx={{width: '100%'}}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon/>} sx={{background: '#EEEEEE'}}>
                                 <Typography>Consultations</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Box display='flex' justifyContent='flex-end' py={2}>
-                                    <Fab sx={{background: '#a2d0c1'}} size="small" onClick={()=>{navigate("/consultation")}}>
-                                        <AddIcon /> 
-                                    </Fab>
+                                    <Tooltip title="Add new medical record">
+                                        <Fab sx={{background: '#AAD8D3'}} size="small" onClick={()=>{navigate("/patients/new-medical-record")}}>
+                                            <AddIcon /> 
+                                        </Fab>
+                                    </Tooltip>
                                 </Box>
                                 <Grid item>
                                     <div style={{height: 430, width: '100%'}}>

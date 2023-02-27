@@ -27,8 +27,18 @@ function NavBar() {
         setAnchorUserMenu(false);
     }
 
+    const [elevationChange, setElevationChange] = useState(false);
+    const changeNavbarElevation = () =>{
+        if(window.scrollY >= 80){
+            setElevationChange(true);
+        }else{
+            setElevationChange(false);
+        }
+    }
+    window.addEventListener('scroll', changeNavbarElevation);
+
   return (
-    <AppBar position="sticky" sx={{background: '#FFFFFF'}}>
+    <AppBar position="sticky" elevation={elevationChange? 3 : 0} sx={{background: '#ECF4F3', p: 1}}>
         <Container maxWidth="xl">
             <Toolbar disableGutters>
                 <Typography sx={{display: {xs: 'none', md: 'flex'}, fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', color: '#191919'}}>MED</Typography>
@@ -64,7 +74,7 @@ function NavBar() {
                 <Typography sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}, fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', color: '#191919'}}>MED</Typography>
                 <Box sx={{flexGrow: 0}}>
                     <Tooltip title="Settings">
-                        <IconButton onClick={handleOpenUserMenu}><Avatar></Avatar></IconButton>
+                        <IconButton onClick={handleOpenUserMenu}> <Avatar sx={{background: '#056676'}}></Avatar></IconButton>
                     </Tooltip>
                     <Menu
                         id="menu-user"

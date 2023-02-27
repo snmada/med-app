@@ -18,8 +18,8 @@
 }
 
 .login-button:hover{
-    color: #FFFFFF;
-    background-color: #344D67;
+    background-color: #19191913;
+    box-shadow: 3px 3px #8888886b;
     border: none;
 }
 
@@ -34,6 +34,7 @@
     cursor: pointer;
     border: 1px solid #191919;
     position: relative;
+    white-space: nowrap;
 }
 
 .register-button::after{

@@ -6,6 +6,7 @@ import PatientList from './pages/Patient/PatientList/PatientList.js'
 import NewPatientRegistration from './pages/Patient/NewPatientRegistration/NewPatientRegistration.js'
 import PatientProfile from './pages/Patient/PatientProfile/PatientProfile.js'
 import CreateMedicalRecord from './pages/MedicalRecord/CreateMedicalRecord/CreateMedicalRecord.js'
+import ViewMedicalRecord from './pages/MedicalRecord/ViewMedicalRecord/ViewMedicalRecord.js'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route exact path="/patients/add" element={<NewPatientRegistration/>}/> 
               <Route exact path="/patients/profile" element={<PatientProfile/>}/>
               <Route exact path="/patients/new-medical-record" element={<CreateMedicalRecord/>}/>
+              <Route exact path="/patients/view-medical-record" element={<ViewMedicalRecord/>}/>
           </Routes>
       </BrowserRouter>
     </>
