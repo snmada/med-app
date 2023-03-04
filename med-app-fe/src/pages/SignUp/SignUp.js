@@ -55,8 +55,8 @@ function SignUp() {
                     </Box>
                     <Box py={1}>
                         <Stepper activeStep={step} alternativeLabel>
-                            {steps.map((label) => (
-                                <Step key={label}
+                            {steps.map((label, index) => (
+                                <Step key={index}
                                     sx={{
                                         '& .MuiStepLabel-root .Mui-completed': {
                                             color: '#8EC3B2', 
