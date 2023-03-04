@@ -24,6 +24,9 @@ app.use(
 const signup = require("./signup/signup");
 app.use("/signup", signup);
 
+const signin = require("./signin/signin");
+app.use("/signin", signin);
+
 app.listen(3001, (error) => {
     if(error){
         console.error("Unable to start the server -> ", error);

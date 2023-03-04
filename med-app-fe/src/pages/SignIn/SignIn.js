@@ -1,11 +1,12 @@
 import {React, useState} from 'react'
-import {Grid, Paper, Box, Typography, TextField, IconButton, InputAdornment} from "@mui/material"
+import {Grid, Paper, Box, Typography, TextField, IconButton, InputAdornment, Alert} from "@mui/material"
 import {Visibility, VisibilityOff} from '@mui/icons-material'
 import {useNavigate} from 'react-router-dom'
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import '../SignIn/SignIn.css'
+import Axios from 'axios'
 
 const initialState = {email: "", password: ""};
 
@@ -31,9 +32,19 @@ function SignUpPage() {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = () => {
-        console.log("Ok")
-    }
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const onSubmit = async () => {
+        try {
+            const {status} = await Axios.post('http://localhost:3001/signin/user-sign-in',{
+                email: formData.email,
+                password: formData.password
+            });
+            status === 200 && navigate("/patients");
+        }catch(error){
+            (error.response.status === 404 || error.response.status === 422)? setErrorMessage(error.response.data) : alert('An error occured on server. Please try again later.');
+        }
+    };
 
   return (
     <div className="signin-container">
@@ -64,6 +75,7 @@ function SignUpPage() {
                                     }}
                                 />
                             </Grid>
+                            {errorMessage && <Alert severity="error" sx={{width: '100%'}}>{errorMessage}</Alert>}
                             <Grid item xs={12} py={3}>
                                 <button type="submit" className="submit-button">Log In</button>
                             </Grid>
