@@ -21,6 +21,9 @@ app.use(
     })
 );
 
+const signup = require("./signup/signup");
+app.use("/signup", signup);
+
 app.listen(3001, (error) => {
     if(error){
         console.error("Unable to start the server -> ", error);

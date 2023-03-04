@@ -1,14 +1,16 @@
 import {React, useEffect, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {Grid, Typography, TextField, Box, IconButton, InputAdornment} from "@mui/material"
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
+import Axios from 'axios'
 import YupPassword from 'yup-password'
 YupPassword(yup)
 
 function StepOne({formData, handleChange, handleNext, handleBack}) {
-
+    const navigate = useNavigate();
     const [changed, setChanged] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -30,8 +32,19 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = () => {
-        handleNext();
+    const onSubmit =  async () => {
+        try {
+            const {status} = await Axios.post('http://localhost:3001/signup/user-sign-up',{
+                lastName: formData.lastName,
+                firstName: formData.firstName,
+                email: formData.email,
+                uid: formData.uid,
+                password: formData.password
+            });
+            status === 200 && navigate("/patients");
+        }catch(error){
+            alert('An error occured on server. Please try again later.');
+        }
     }
 
     const setCorrect = (id) => {

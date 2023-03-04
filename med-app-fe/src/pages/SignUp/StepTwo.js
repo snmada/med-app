@@ -1,9 +1,10 @@
-import React from 'react'
-import {Grid, Typography, TextField, Box} from "@mui/material"
+import {React, useState} from 'react'
+import {Grid, Typography, TextField, Box, Alert} from "@mui/material"
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import "./SignUp.css"
+import Axios from 'axios'
 
 function StepOne({formData, handleChange, handleNext, handleBack}) {
 
@@ -15,9 +16,18 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
         resolver: yupResolver(schema),
     });
 
-    const onSubmit = () => {
-        handleNext();
-    }
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const onSubmit = async () => {
+        try {
+            const {status} = await Axios.post('http://localhost:3001/signup/uid',{
+                uid: formData.uid
+            });
+            status === 200 && handleNext();
+        }catch(error){
+            (error.response.status === 404 || error.response.status === 409)? setErrorMessage(error.response.data) : alert('An error occured on server. Please try again later.');
+        }
+    };
 
   return (
     <>
@@ -30,6 +40,7 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
                 <TextField {...register("uid")} required value={formData.uid} name="uid" type="text" label="UID" variant="outlined" onChange={handleChange} fullWidth/>
                 <Typography className="error">{errors.uid?.message}</Typography>
             </Grid>
+            {errorMessage &&  <Alert severity="error" sx={{width: '100%'}}>{errorMessage}</Alert>}
             <Grid item xs={12} pt={2} pb={7}>
                 <Typography sx={{fontSize: '14px', color: '#9d9d9d'}}>Note: Enter your doctor UID (Unique Identifier) to prove that you are part of healthcare system. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
             </Grid>
