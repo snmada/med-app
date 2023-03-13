@@ -1,25 +1,46 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Grid, Box, Button} from '@mui/material'
 import {DataGrid, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton} from '@mui/x-data-grid'
 import NavBar from '../../../components/NavBar/NavBar.js'
+import Axios from 'axios'
 
 function PatientList() {
+    Axios.defaults.withCredentials = true;
     const navigate = useNavigate();
     const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        async function getPatientList() {
+            try
+            {
+                const response = await Axios.get('http://localhost:3001/patient/get-patient-list');
+                if(response)
+                {
+                    setRows(response.data);
+                }
+            }
+            catch(error)
+            {
+                console.error("Error: ", error);
+            }
+        }
+        getPatientList();
+    }, []);
 
     const columns = [
         {field: 'id', headerName: 'ID', width: 70, hideable: false},
         {field: 'view', headerName: 'Profile', width: 110, sortable: false, filterable: false, hideable: false,
             renderCell: (cellValues) => {
                 return (
-                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black', "&:hover":{color: '#FBFBFB'}}} size="small" onClick={() => {navigate("/patients/profile")}}>View</Button>
+                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black', "&:hover":{color: '#FBFBFB'}}} size="small" onClick={() => {navigate("/patients/profile/" + cellValues.id)}}>View</Button>
                 )
             }
         },
-        {field: 'lastName', headerName: 'Last Name', width: 200, hideable: false},
-        {field: 'firstName', headerName: 'First Name', width: 200, hideable: false},
+        {field: 'lastname', headerName: 'Last Name', width: 200, hideable: false},
+        {field: 'firstname', headerName: 'First Name', width: 200, hideable: false},
         {field: 'cnp', headerName: 'CNP', width: 150, hideable: false},
+        {field: 'date_of_birth', headerName: 'Date of Birth', type: 'date', width: 150, hideable: false},
         {field: 'age', headerName: 'Age', type: 'number', width: 90, hide: true},
         {field: 'city', headerName: 'City', width: 180, hide: true},
         {field: 'county', headerName: 'County', width: 180, hide: true}

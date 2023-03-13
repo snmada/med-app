@@ -10,20 +10,14 @@ import ViewMedicalRecord from './pages/MedicalRecord/ViewMedicalRecord/ViewMedic
 
 function App() {
   return (
-    <>
       <BrowserRouter>
           <Routes>
               <Route exact path="/" element={<LandingPage/>}/>
               <Route exact path="/register" element={<SignUp/>}/>
               <Route exact path="/login" element={<SignIn/>}/>
-              <Route exact path="/patients" element={<PatientList/>}/>
-              <Route exact path="/patients/add" element={<NewPatientRegistration/>}/> 
-              <Route exact path="/patients/profile" element={<PatientProfile/>}/>
-              <Route exact path="/patients/new-medical-record" element={<CreateMedicalRecord/>}/>
-              <Route exact path="/patients/view-medical-record" element={<ViewMedicalRecord/>}/>
+              <Route exact path="/patients" element={<PatientList/>}/> 
           </Routes>
       </BrowserRouter>
-    </>
   )
 }
 
