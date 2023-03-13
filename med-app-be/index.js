@@ -17,7 +17,8 @@ app.use(
         key: process.env.KEY,
         secret: process.env.SECRET,
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        cookie: { maxAge: 1000 * 60 * 60 * 24 }
     })
 );
 
@@ -27,11 +28,16 @@ app.use("/signup", signup);
 const signin = require("./signin/signin");
 app.use("/signin", signin);
 
+const signout = require("./signout/signout");
+app.use("/signout", signout);
+
 app.listen(3001, (error) => {
-    if(error){
+    if(error)
+    {
         console.error("Unable to start the server -> ", error);
     }
-    else{
+    else
+    {
         console.log("\x1b[32m%s\x1b[0m", "Server running...");
     }
 });

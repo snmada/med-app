@@ -1,15 +1,38 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {AppBar, Container, Toolbar, Typography, Box, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, ListItemIcon} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import "../NavBar/NavBar.css"
 import {NavMenuLinks as navLink} from "../NavBar/NavMenuLinks.js"
 import LogoutIcon from '@mui/icons-material/Logout';
+import Axios from 'axios'
 
 function NavBar() {
+    Axios.defaults.withCredentials = true;
+
     const navigate = useNavigate();
     const [anchorNavMenu, setAnchorNavMenu] = useState(false);
     const [anchorUserMenu, setAnchorUserMenu] = useState(false);
+    const [userInitials, setUserInitials] = useState("");
+    const [elevationChange, setElevationChange] = useState(false);
+
+    useEffect(() => {
+        async function getUser() {
+            try
+            {
+                const response = await Axios.get('http://localhost:3001/signin/user-sign-in');
+                if(response)
+                {
+                    setUserInitials(response.data.lastname[0] + "" + response.data.firstname[0]);
+                }
+            }
+            catch(error)
+            {
+                console.error("Error: ", error);
+            }
+        }
+        getUser();
+    }, []);
 
     const handleOpenNavMenu = (e) => {
         setAnchorNavMenu(e.currentTarget);
@@ -27,15 +50,29 @@ function NavBar() {
         setAnchorUserMenu(false);
     }
 
-    const [elevationChange, setElevationChange] = useState(false);
     const changeNavbarElevation = () =>{
-        if(window.scrollY >= 80){
+        if(window.scrollY >= 80)
+        {
             setElevationChange(true);
-        }else{
+        }
+        else
+        {
             setElevationChange(false);
         }
     }
     window.addEventListener('scroll', changeNavbarElevation);
+
+    const logout = async () => {
+        try 
+        {
+            const {status} = await Axios.post('http://localhost:3001/signout/signout');
+            status === 200 && navigate("/");
+        }
+        catch(error)
+        {
+            alert('An error occured on server. Please try again later.');
+        }
+    }
 
   return (
     <AppBar position="sticky" elevation={elevationChange? 3 : 0} sx={{background: '#ECF4F3', p: 1}}>
@@ -74,7 +111,7 @@ function NavBar() {
                 <Typography sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}, fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', color: '#191919'}}>MED</Typography>
                 <Box sx={{flexGrow: 0}}>
                     <Tooltip title="Settings">
-                        <IconButton onClick={handleOpenUserMenu}> <Avatar sx={{background: '#056676'}}></Avatar></IconButton>
+                        <IconButton onClick={handleOpenUserMenu}> <Avatar sx={{background: '#056676'}}>{userInitials}</Avatar></IconButton>
                     </Tooltip>
                     <Menu
                         id="menu-user"
@@ -87,7 +124,7 @@ function NavBar() {
                         onClose={handleCloseUserMenu}
                         disableScrollLock={true}
                     >
-                        <MenuItem  onClick={handleCloseUserMenu}>
+                        <MenuItem onClick={logout}>
                             <ListItemIcon>
                                 <LogoutIcon/>
                             </ListItemIcon>
