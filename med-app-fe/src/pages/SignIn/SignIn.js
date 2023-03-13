@@ -11,6 +11,8 @@ import Axios from 'axios'
 const initialState = {email: "", password: ""};
 
 function SignUpPage() {
+    Axios.defaults.withCredentials = true;
+    
     const navigate = useNavigate();
     const [formData, setFormData] = useState(initialState);
     
