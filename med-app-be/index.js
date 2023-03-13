@@ -31,6 +31,9 @@ app.use("/signin", signin);
 const signout = require("./signout/signout");
 app.use("/signout", signout);
 
+const patient = require("./patient/patient");
+app.use("/patient", patient);
+
 app.listen(3001, (error) => {
     if(error)
     {
