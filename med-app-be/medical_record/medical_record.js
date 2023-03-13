@@ -21,4 +21,33 @@ router.get("/get-medical-record-list/:id", (req, res) => {
     )
 });
 
+router.post("/add-medical-record", (req, res) => {
+    const {diagnosis, symptoms, treatment, remarks} = req.body.formData;
+    db.query(
+        "INSERT INTO medical_record (patient_id, doctor_id, date, diagnosis, symptoms, treatment, remarks) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+        [
+            req.body.id,
+            req.session.user.doctor_id,
+            req.body.date.split('/').reverse().join('-'),
+            diagnosis,
+            symptoms,
+            treatment,
+            remarks
+        ],
+        (error, result) => {
+            if(error)
+            {
+                res.status(500).send();
+            }
+            else
+            {
+                if(result.affectedRows)
+                {
+                    res.status(200).send('Successfully added!');
+                }
+            }
+        }
+    )
+});
+
 module.exports = router;
