@@ -50,4 +50,42 @@ router.post("/add-medical-record", (req, res) => {
     )
 });
 
+router.get("/get-medical-record/:id", (req, res) => {
+    db.query(
+        "SELECT medical_record_id as id, DATE_FORMAT(date, '%d-%m-%Y') as date, diagnosis, symptoms, treatment, remarks FROM medical_record WHERE medical_record_id = ?", req.params.id,
+        (error, result) => {
+            if(error)
+            {
+                res.status(500).send();
+            }
+            else
+            {
+                if(result.length)
+                {
+                    res.status(200).send(result);
+                }
+            }
+        }
+    )
+});
+
+router.delete("/delete-medical-record/:id", (req, res) => {
+    db.query(
+        "DELETE FROM medical_record WHERE medical_record_id = ?", req.params.id,
+        (error, result) => {
+            if(error)
+            {
+                res.status(500).send();
+            }
+            else
+            {
+                if(result.affectedRows)
+                {
+                    res.status(200).send(result);
+                }
+            }
+        }
+    )
+});
+
 module.exports = router;
