@@ -34,6 +34,9 @@ app.use("/signout", signout);
 const patient = require("./patient/patient");
 app.use("/patient", patient);
 
+const medical_record = require("./medical_record/medical_record");
+app.use("/medical-record", medical_record);
+
 app.listen(3001, (error) => {
     if(error)
     {

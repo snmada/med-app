@@ -17,6 +17,7 @@ function App() {
               <Route exact path="/login" element={<SignIn/>}/>
               <Route exact path="/patients" element={<PatientList/>}/> 
               <Route exact path="/patients/add" element={<NewPatientRegistration/>}/> 
+              <Route exact path="/patients/profile/:patient_id" element={<PatientProfile/>}/>
           </Routes>
       </BrowserRouter>
   )
