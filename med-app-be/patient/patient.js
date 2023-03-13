@@ -66,4 +66,49 @@ router.post("/add-patient", (req, res) => {
     )
 });
 
+router.put("/update-patient/:id", (req, res) => {
+    const {
+        firstName, lastName, cnp, dateOfBirth, age, gender, occupation, street, building_number, floor, appartment, 
+        city, county, phoneNumber, email, weight, height, bloodGroup, rhFactor, allergies
+    } =  req.body.data;
+    
+    db.query(
+        "SELECT * FROM patient WHERE cnp = ?", cnp,
+        (error, result) => {
+            if(error)
+            {
+                res.status(500).send();
+            }
+            else
+            {
+                if(!result.length)
+                {
+                    db.query(
+                        "UPDATE patient set lastname = ?, firstname = ?, cnp = ?, date_of_birth = ?, age = ?, gender = ?, occupation = ?, street = ?, building_number = ?, floor = ?, appartment = ?, city = ?, county = ?, phone_number = ?, email = ?, weight = ?, height = ?, blood_group = ?, rh_factor = ?, allergies = ? WHERE patient_id = ?", 
+                        [lastName, firstName, cnp, dateOfBirth.split('/').reverse().join('-'), age, gender, occupation, street, building_number, floor, appartment, 
+                        city, county, phoneNumber, email, weight, height, bloodGroup, rhFactor, allergies, req.params.id],
+                        (error, result) => {
+                            if(error)
+                            {
+                                res.status(500).send();
+                            }
+                            else
+                            {
+                                if(result.affectedRows)
+                                {
+                                    res.status(200).send('Patient data updated successfully!');
+                                }
+                            }
+                        }
+                    )
+                }
+                else
+                {
+                    res.status(409).send('Patient already exists');
+                }
+            }
+        }
+    )
+});
+
 module.exports = router;
