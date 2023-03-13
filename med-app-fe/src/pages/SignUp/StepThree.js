@@ -10,6 +10,8 @@ import YupPassword from 'yup-password'
 YupPassword(yup)
 
 function StepOne({formData, handleChange, handleNext, handleBack}) {
+    Axios.defaults.withCredentials = true;
+    
     const navigate = useNavigate();
     const [changed, setChanged] = useState(false);
 
