@@ -21,6 +21,25 @@ router.get("/get-patient-list", (req, res) => {
     )
 });
 
+router.get("/get-patient-data/:id", (req, res) => {
+    db.query(
+        "SELECT lastname as lastName, firstname as firstName, cnp, DATE_FORMAT(date_of_birth, '%d/%m/%Y') as dateOfBirth, age, gender, occupation, street, building_number as buildingNumber, floor, appartment, city, county, phone_number as phoneNumber, email, weight, height, blood_group as bloodGroup, rh_factor as rhFactor, allergies FROM patient WHERE patient_id = ?", req.params.id,
+        (error, result) => {
+            if(error)
+            {
+                res.status(500).send();
+            }
+            else
+            {
+                if(result)
+                {
+                    res.status(200).send(result);
+                }
+            }
+        }
+    )
+});
+
 router.post("/add-patient", (req, res) => {
     const {
         firstName, lastName, cnp, dateOfBirth, age, gender, occupation, street, building_number, floor, 
