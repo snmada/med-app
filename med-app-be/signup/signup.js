@@ -68,7 +68,7 @@ router.post('/user-sign-up', (req, res) => {
                     {
                         if(result.affectedRows)
                         {
-                            const {doctor_id, lastname, firstname} = [req.body.uid, req.body.lastName, req.body.firstName];
+                            const [doctor_id, lastname, firstname] = [req.body.uid, req.body.lastName, req.body.firstName];
                             req.session.user = {doctor_id, lastname, firstname, loggedIn: true};
                             res.status(200).send();
                         }
