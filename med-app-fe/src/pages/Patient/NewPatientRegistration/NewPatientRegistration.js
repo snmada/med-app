@@ -1,12 +1,13 @@
 import {React, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import NavBar  from "../../../components/NavBar/NavBar.js"
-import {Grid, Paper, Typography, TextField, Autocomplete, InputAdornment, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, createFilterOptions, Box, Button} from "@mui/material"
+import {Grid, Paper, Typography, TextField, Autocomplete, InputAdornment, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, createFilterOptions, Box, Button, Alert} from "@mui/material"
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import SaveIcon from '@mui/icons-material/Save'
 import CloseIcon from '@mui/icons-material/Close'
+import Axios from 'axios'
 
 const initialState = {firstName: "", lastName: "", cnp: "", dateOfBirth: "", age: "", gender: "", occupation: "", street: "", buildingNumber: "", floor: "",
     appartment: "", city: "", county: "", phoneNumber: "", email: "", weight: "", height: "", bloodGroup: "", rhFactor: "", allergies: ""}
@@ -14,12 +15,39 @@ const initialState = {firstName: "", lastName: "", cnp: "", dateOfBirth: "", age
 function NewPatientRegistration() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState(initialState);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
-        if(e.target.name == 'cnp' && validateCNP(e.target.value)){
+        if(e.target.name == 'cnp' && validateCNP(e.target.value))
+        {
             const birthInfo = getBirthInfo(e.target.value);
             setFormData({...formData, dateOfBirth: birthInfo[0], age: birthInfo[1], gender: birthInfo[2]});
+        }
+    }
+
+    const onSubmit = async () => {
+        try 
+        {
+            const response = await Axios.post('http://localhost:3001/patient/add-patient', {formData});
+            if(response.status === 200)
+            {
+                setSuccessMessage(response.data);
+                setErrorMessage("");
+            }
+        }
+        catch(error)
+        {
+            if(error.response.status === 409)
+            {
+                setErrorMessage(error.response.data);
+                setSuccessMessage("");
+            }
+            else
+            {
+                alert('An error occured on server. Please try again later.');
+            }
         }
     }
 
@@ -42,7 +70,8 @@ function NewPatientRegistration() {
     const filter = createFilterOptions();
 
     const validateCNP = (cnp) => {
-        if(cnp.length === 13){
+        if(cnp.length === 13)
+        {
             return 1;
         }
         return 0;
@@ -50,17 +79,21 @@ function NewPatientRegistration() {
 
     const getBirthInfo = (cnp) => {
         let year, month, day, age, gender, month_difference="", full_year="";
-        if(cnp.substring(0,1) === "1" || cnp.substring(0,1) === "5" || cnp.substring(0,1) === "7"){
+        if(cnp.substring(0,1) === "1" || cnp.substring(0,1) === "5" || cnp.substring(0,1) === "7")
+        {
             gender = "M";
         }
-        if(cnp.substring(0,1) === "2" || cnp.substring(0,1) === "6" || cnp.substring(0,1) === "8"){
+        if(cnp.substring(0,1) === "2" || cnp.substring(0,1) === "6" || cnp.substring(0,1) === "8")
+        {
             gender = "F";
         }
 
-        if(cnp.substring(0,1) === "1" || cnp.substring(0,1) === "2"){
+        if(cnp.substring(0,1) === "1" || cnp.substring(0,1) === "2")
+        {
             year = parseInt("19" + cnp.substring(1,3));
         }
-        if(cnp.substring(0,1) === "5" || cnp.substring(0,1) === "6"){
+        if(cnp.substring(0,1) === "5" || cnp.substring(0,1) === "6")
+        {
             year = parseInt("20" + cnp.substring(1,3));
         }
 
@@ -88,10 +121,6 @@ function NewPatientRegistration() {
         {label: "-/negative", value: "-/negative"},
         {label: "+/positive", value: "+/positive"}
     ]
-
-    const onSubmit = () => {
-        console.log(formData)
-    }
 
   return (
     <>
@@ -252,6 +281,8 @@ function NewPatientRegistration() {
                                 <Button variant="contained" sx={{background: '#F05454'}} onClick={() => {navigate("/patients")}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
                             </Box>
                         </Grid>
+                        {successMessage && <Alert severity="success" sx={{width: '100%'}}>{successMessage}</Alert>}
+                        {errorMessage && <Alert severity="error" sx={{width: '100%'}}>{errorMessage}</Alert>}
                     </Grid>
                 </Paper>
             </Grid>
