@@ -41,7 +41,7 @@ function SignUp() {
             case 1:
                 return <StepTwo formData={formData} handleChange={handleChange} handleNext={handleNext} handleBack={handleBack}/>;
             case 2:
-                return <StepThree formData={formData} handleChange={handleChange} handleNext={handleNext} handleBack={handleBack}/>;
+                return <StepThree formData={formData} handleChange={handleChange} handleBack={handleBack}/>;
         }
     }
 
@@ -65,7 +65,7 @@ function SignUp() {
                                             color: '#F9D97D', 
                                         },
                                         '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
-                                            fill: 'black', 
+                                            fill: '#191919', 
                                         },
                                     }}
                                 >

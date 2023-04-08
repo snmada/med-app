@@ -1,6 +1,6 @@
 import {React, useEffect, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {Grid, Typography, TextField, Box, IconButton, InputAdornment} from "@mui/material"
+import {Grid, Typography, TextField, Box, IconButton, InputAdornment} from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
@@ -9,7 +9,7 @@ import Axios from 'axios'
 import YupPassword from 'yup-password'
 YupPassword(yup)
 
-function StepOne({formData, handleChange, handleNext, handleBack}) {
+function StepThree({formData, handleChange, handleBack}) {
     Axios.defaults.withCredentials = true;
     
     const navigate = useNavigate();
@@ -28,14 +28,15 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
     const schema = yup.object().shape({
         password: yup.string().password(),
         confirmPassword: yup.string().oneOf([yup.ref('password'), null], "Passwords don't match. Try again.")
-    })
+    });
 
     const {register, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(schema),
     });
 
     const onSubmit =  async () => {
-        try {
+        try 
+        {
             const {status} = await Axios.post('http://localhost:3001/signup/user-sign-up',{
                 lastName: formData.lastName,
                 firstName: formData.firstName,
@@ -44,7 +45,9 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
                 password: formData.password
             });
             status === 200 && navigate("/patients");
-        }catch(error){
+        }
+        catch(error)
+        {
             alert('An error occured on server. Please try again later.');
         }
     }
@@ -62,33 +65,48 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
     const validatePassword = () => {
         if(changed)
         {
-            if(formData.password.trim().length < 8){
+            if(formData.password.trim().length < 8)
+            {
                 setIncorrect("number-char");
-            }else{
+            }
+            else
+            {
                 setCorrect("number-char");
             }
     
-            if(/[1-9]/g.test(formData.password.trim())){
+            if(/[1-9]/g.test(formData.password.trim()))
+            {
                 setCorrect("digit");
-            }else{
+            }
+            else
+            {
                 setIncorrect("digit");
             }
     
-            if(/[a-z]/g.test(formData.password.trim())){
+            if(/[a-z]/g.test(formData.password.trim()))
+            {
                 setCorrect("lower-letter");
-            }else{
+            }
+            else
+            {
                 setIncorrect("lower-letter");
             }
     
-            if(/[A-Z]/g.test(formData.password.trim())){
+            if(/[A-Z]/g.test(formData.password.trim()))
+            {
                 setCorrect("capital-letter");
-            }else{
+            }
+            else
+            {
                 setIncorrect("capital-letter");
             }
     
-            if(/[.!?\\-]/g.test(formData.password.trim())){
+            if(/[.!?-]/g.test(formData.password.trim()))
+            {
                 setCorrect("special-char");
-            }else{
+            }
+            else
+            {
                 setIncorrect("special-char");
             }
         }
@@ -97,12 +115,12 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
     useEffect(()=>{
         setChanged(true);
         validatePassword();
-    },[formData.password])
+    },[formData.password]);
 
   return (
     <>
     <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container sx={{background: 'transparent'}}>
+        <Grid container>
             <Grid item xs={12} py={2}>
                 <Typography className="description">Sign-In Information</Typography>
             </Grid>
@@ -138,7 +156,7 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
                     <li id="lower-letter">one lowercase character</li>
                     <li id="capital-letter">one uppercase character</li>
                     <li id="digit">one digit</li>
-                    <li id="special-char">one special character /.-?!</li>
+                    <li id="special-char">one special character .!?-</li>
                 </ul>
             </div>
             <Grid item xs={6} py={2}>
@@ -157,4 +175,4 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
   )
 }
 
-export default StepOne
+export default StepThree

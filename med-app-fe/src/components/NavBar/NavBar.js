@@ -2,9 +2,9 @@ import {React, useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {AppBar, Container, Toolbar, Typography, Box, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, ListItemIcon} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import "../NavBar/NavBar.css"
-import {NavMenuLinks as navLink} from "../NavBar/NavMenuLinks.js"
-import LogoutIcon from '@mui/icons-material/Logout';
+import '../NavBar/NavBar.css'
+import {NavMenuLinks as navLink} from '../NavBar/NavMenuLinks.js'
+import LogoutIcon from '@mui/icons-material/Logout'
 import Axios from 'axios'
 
 function NavBar() {
@@ -75,7 +75,7 @@ function NavBar() {
     }
 
   return (
-    <AppBar position="sticky" elevation={elevationChange? 3 : 0} sx={{background: '#ECF4F3', p: 1}}>
+    <AppBar position="sticky" elevation={elevationChange? 3 : 0} sx={{background: '#ECF4F3', py: 1, px: 5}}>
         <Container maxWidth="xl">
             <Toolbar disableGutters>
                 <Typography sx={{display: {xs: 'none', md: 'flex'}, fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', color: '#191919'}}>MED</Typography>
@@ -110,8 +110,8 @@ function NavBar() {
                 </Box>
                 <Typography sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}, fontFamily: 'Montserrat, sans-serif', fontSize: '25px', fontWeight: '500', color: '#191919'}}>MED</Typography>
                 <Box sx={{flexGrow: 0}}>
-                    <Tooltip title="Settings">
-                        <IconButton onClick={handleOpenUserMenu}> <Avatar sx={{background: '#056676'}}>{userInitials}</Avatar></IconButton>
+                    <Tooltip title="Account">
+                        <IconButton onClick={handleOpenUserMenu}> <Avatar sx={{background: '#68A7AD'}}>{userInitials}</Avatar></IconButton>
                     </Tooltip>
                     <Menu
                         id="menu-user"

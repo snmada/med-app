@@ -14,7 +14,6 @@ function ViewMedicalRecord() {
     const [patient, setPatient] = useState({});
     const [medicalRecord, setMedicalRecord] = useState({});
     
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -39,7 +38,7 @@ function ViewMedicalRecord() {
             }
         }
         getPatientData();
-    }, []);
+    }, [param.patient_id]);
 
     useEffect(() => {
         async function getMedicalRecord() {
@@ -57,7 +56,7 @@ function ViewMedicalRecord() {
             }
         }
         getMedicalRecord();
-    }, []);
+    }, [param.medical_record_id]);
 
     const deleteMedicalRecord = async () => {
         try 
@@ -163,12 +162,12 @@ function ViewMedicalRecord() {
             <DialogTitle>{"Confirm delete"}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Are you sure you want to delete medical record? <br></br> You can't undo this action.
+                    Are you sure you want to delete the medical record? <br></br> You can't undo this action.
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button sx={{background: '#F05454', color: '#FBFBFB', "&:hover": {background: '#FFB84C'}}} onClick={deleteMedicalRecord}>Delete</Button>
+                <Button sx={{background: '#F05454', color: '#FBFBFB', "&:hover": {background: '#FFB84C'}}} onClick={deleteMedicalRecord}>Confirm</Button>
             </DialogActions>
       </Dialog>
     </>
