@@ -10,7 +10,7 @@ import Axios from 'axios'
 
 const initialState = {email: "", password: ""};
 
-function SignUpPage() {
+function SignIn() {
     Axios.defaults.withCredentials = true;
     
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ function SignUpPage() {
     };
 
     const schema = yup.object().shape({
-        email: yup.string().email("Must be an valid email")
+        email: yup.string().email("Please use a valid email address")
     })
 
     const {register, handleSubmit, formState: {errors}} = useForm({
@@ -37,13 +37,16 @@ function SignUpPage() {
     const [errorMessage, setErrorMessage] = useState("");
 
     const onSubmit = async () => {
-        try {
+        try 
+        {
             const {status} = await Axios.post('http://localhost:3001/signin/user-sign-in',{
                 email: formData.email,
                 password: formData.password
             });
             status === 200 && navigate("/patients");
-        }catch(error){
+        }
+        catch(error)
+        {
             (error.response.status === 404 || error.response.status === 422)? setErrorMessage(error.response.data) : alert('An error occured on server. Please try again later.');
         }
     };
@@ -94,4 +97,4 @@ function SignUpPage() {
   )
 }
 
-export default SignUpPage
+export default SignIn

@@ -33,15 +33,15 @@ function PatientList() {
         {field: 'view', headerName: 'Profile', width: 110, sortable: false, filterable: false, hideable: false,
             renderCell: (cellValues) => {
                 return (
-                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black', "&:hover":{color: '#FBFBFB'}}} size="small" onClick={() => {navigate("/patients/profile/" + cellValues.id)}}>View</Button>
+                    <Button variant="contained" sx={{background: '#FFE69A', color: 'black', "&:hover":{color: '#FBFBFB'}}} size="small" onClick={() => {navigate("/patients/profile/" + cellValues.id)}}>View</Button>
                 )
             }
         },
-        {field: 'lastname', headerName: 'Last Name', width: 200, hideable: false},
-        {field: 'firstname', headerName: 'First Name', width: 200, hideable: false},
-        {field: 'cnp', headerName: 'CNP', width: 150, hideable: false},
-        {field: 'date_of_birth', headerName: 'Date of Birth', type: 'date', width: 150, hideable: false},
-        {field: 'age', headerName: 'Age', type: 'number', width: 90, hide: true},
+        {field: 'lastname', headerName: 'Last Name', width: 230, hideable: false},
+        {field: 'firstname', headerName: 'First Name', width: 230, hideable: false},
+        {field: 'cnp', headerName: 'CNP', width: 150},
+        {field: 'date_of_birth', headerName: 'Date of Birth', type: 'date', width: 150},
+        {field: 'age', headerName: 'Age', type: 'number', width: 100, hide: true},
         {field: 'city', headerName: 'City', width: 180, hide: true},
         {field: 'county', headerName: 'County', width: 180, hide: true}
     ]
@@ -61,7 +61,7 @@ function PatientList() {
     <Grid container sx={{px: {xs: 2, md: 8}, display: 'block', py: 3}}>
         <Grid item py={3}>
             <Box display='flex' justifyContent='flex-end'>
-                <button style={{border: 'none', fontSize: '18px', padding: '5px 30px', cursor: 'pointer', background: '#AAD8D3'}} onClick={() => {navigate("/patients/add")}}> + New Patient</button>
+                <button style={{border: 'none', fontSize: '18px', padding: '5px 30px', cursor: 'pointer', background: '#CBE4DE'}} onClick={() => {navigate("/patients/add")}}> + New Patient</button>
             </Box>
         </Grid>
         <Grid item>

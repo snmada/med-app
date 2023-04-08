@@ -4,7 +4,7 @@ import {AppBar, Toolbar, Grid, Box, Typography} from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import '../LandingPage/LandingPage.css'
-import medicalrecord from "../../images/patient-medical-record.png"
+import medicalrecord from '../../images/patient-medical-record.png'
 
 function LandingPage() {
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ function LandingPage() {
         <Grid container sx={{px:{xs: 4, sm: 20}}}>
             <Grid item lg={6} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
                 <Grid container py={12}>
-                    <Grid item xs={12} md={12} pb={3}>
+                    <Grid item xs={12} pb={3}>
                         <div className="headline"><u style={{textDecorationThickness: '1px'}}>The Simple Way</u> To</div>
                         <div className="headline"><span style={{fontWeight: '400'}}>Organize</span> And <span style={{fontWeight: '400'}}>Maintain</span></div>
                         <div className="headline"><span style={{fontWeight: '300', backgroundColor: '#DAE2B6', width:'max-content'}}>Patient Records</span></div>

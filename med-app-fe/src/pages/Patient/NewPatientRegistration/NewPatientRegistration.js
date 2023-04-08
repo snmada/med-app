@@ -1,6 +1,6 @@
 import {React, useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import NavBar  from "../../../components/NavBar/NavBar.js"
+import NavBar  from '../../../components/NavBar/NavBar.js'
 import {Grid, Paper, Typography, TextField, Autocomplete, InputAdornment, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, createFilterOptions, Box, Button, Alert} from "@mui/material"
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
@@ -10,20 +10,54 @@ import CloseIcon from '@mui/icons-material/Close'
 import Axios from 'axios'
 
 const initialState = {firstName: "", lastName: "", cnp: "", dateOfBirth: "", age: "", gender: "", occupation: "", street: "", buildingNumber: "", floor: "",
-    appartment: "", city: "", county: "", phoneNumber: "", email: "", weight: "", height: "", bloodGroup: "", rhFactor: "", allergies: ""}
+    apartment: "", city: "", county: "", phoneNumber: "", email: "", weight: "", height: "", bloodGroup: "", rhFactor: "", allergies: ""}
 
 function NewPatientRegistration() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState(initialState);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const filter = createFilterOptions();
+
+    const allergens = ['dairy', 'gluten', 'egg', 'fish', 'sesame', 'coconut', 'mustard', 'peanuts'];
+
+    const optionsBloodGroup = [
+        {label: "O", value: "O"},
+        {label: "A", value: "A"},
+        {label: "B", value: "B"},
+        {label: "AB", value: "AB"}
+    ];
+
+    const optionsRHFactor = [
+        {label: "-/negative", value: "-/negative"},
+        {label: "+/positive", value: "+/positive"}
+    ];
+
+    const schema = yup.object().shape({
+        firstName: yup.string().matches(/[a-zA-ZăâîșțĂÂÎȘȚ -]+$/, "Must be only letters"),
+        lastName: yup.string().matches(/[a-zA-ZăâîșțĂÂÎȘȚ -]+$/, "Must be only letters"),
+        cnp: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(13, 'Must be a valid CNP').max(13, 'Must be a valid CNP'),
+        phoneNumber: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Must be exactly 10 digits').max(10, 'Must be exactly 10 digits'),
+        email: yup.string().email("Please use a valid email address"),
+        weight: yup.number().positive().integer().min(30).max(300),
+        height: yup.number().positive().integer().min(30).max(250),
+        bloodGroup: yup.string().nullable().required("Blood group is required"),
+        rhFactor: yup.string().nullable().required("RH factor is required")
+    });
+
+    const {register, handleSubmit, formState: {errors}} = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const handleChange = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value});
-        if(e.target.name == 'cnp' && validateCNP(e.target.value))
+        if(e.target.name === 'cnp' && validateCNP(e.target.value))
         {
             const birthInfo = getBirthInfo(e.target.value);
-            setFormData({...formData, dateOfBirth: birthInfo[0], age: birthInfo[1], gender: birthInfo[2]});
+            setFormData({...formData, cnp: e.target.value, dateOfBirth: birthInfo[0], age: birthInfo[1], gender: birthInfo[2]});
+        }
+        else
+        {
+            setFormData({...formData, [e.target.name]: e.target.value});
         }
     }
 
@@ -50,24 +84,6 @@ function NewPatientRegistration() {
             }
         }
     }
-
-    const schema = yup.object().shape({
-        firstName: yup.string().matches(/[a-zăâîșțĂÂÎȘȚ -]+/i, "Must be only letters"),
-        lastName: yup.string().matches(/[a-zăâîșțĂÂÎȘȚ -]+/i, "Must be only letters"),
-        cnp: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(13, 'Must be a valid CNP').max(13, 'Must be a valid CNP'),
-        phoneNumber: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Must be exactly 10 digits').max(10, 'Must be exactly 10 digits'),
-        email: yup.string().email("Must be an valid email"),
-        weight: yup.number().positive().integer().min(30).max(300),
-        height: yup.number().positive().integer().min(30).max(250),
-        bloodGroup: yup.string().nullable().required("Blood group is required"),
-        rhFactor: yup.string().nullable().required("RH factor is required")
-    })
-
-    const {register, handleSubmit, formState: {errors}} = useForm({
-        resolver: yupResolver(schema),
-    });
-
-    const filter = createFilterOptions();
 
     const validateCNP = (cnp) => {
         if(cnp.length === 13)
@@ -108,27 +124,13 @@ function NewPatientRegistration() {
         return [day + "/" + month + "/" + year, age, gender];
     }
 
-    const allergens = ['dairy', 'gluten', 'egg', 'fish', 'sesame', 'coconut', 'mustard', 'peanuts'];
-
-    const optionsBloodGroup = [
-        {label: "O", value: "O"},
-        {label: "A", value: "A"},
-        {label: "B", value: "B"},
-        {label: "AB", value: "AB"}
-    ];
-
-    const optionsRHFactor = [
-        {label: "-/negative", value: "-/negative"},
-        {label: "+/positive", value: "+/positive"}
-    ]
-
   return (
     <>
     <NavBar/>
     <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container sx={{background: 'white', py: 6}}>
+        <Grid container sx={{background: '#FBFBFB', py: 6}}>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <Paper elevation={20} sx={{width: {xs: '500px', sm: '850px'}, padding:'45px 50px'}}>
+                <Paper elevation={5} sx={{width: {xs: '500px', sm: '850px'}, padding:'45px 50px'}}>
                     <Grid container>
                         <Grid item xs={12} px={1} style={{marginBottom: '25px', background: '#34626C', display: 'flex', justifyContent: 'center'}}>
                             <Typography sx={{fontSize: '22px', color: '#FBFBFB', p: 2}}>New Patient Registration</Typography>
@@ -167,18 +169,17 @@ function NewPatientRegistration() {
                             <TextField {...register("street")} required name="street" type="text" label="Street" variant="standard" size="small" fullWidth onChange={handleChange}/>
                         </Grid>
                         <Grid item xs={12} p={1}>
-                            <TextField {...register("buildingNumber")}  name="buildingNumber" type="text" label="Building number" variant="standard" size="small" fullWidth onChange={handleChange}/>
+                            <TextField {...register("buildingNumber")} required name="buildingNumber" type="text" label="Building number" variant="standard" size="small" fullWidth onChange={handleChange}/>
                         </Grid>
                         <Grid item xs={12} p={1}>
                             <TextField {...register("floor")} name="floor" type="text" label="Floor" variant="standard" size="small" fullWidth onChange={handleChange}/>
                         </Grid>
                         <Grid item xs={12} p={1}>
-                            <TextField {...register("appartment")} name="appartment" type="text" label="Appartment" variant="standard" size="small" fullWidth onChange={handleChange}/>
+                            <TextField {...register("apartment")} name="apartment" type="text" label="Apartment" variant="standard" size="small" fullWidth onChange={handleChange}/>
                         </Grid>
                         <Grid item xs={12} sm={6} p={1}>
                             <Autocomplete
                                 disablePortal
-                                id="combo-box-demo"
                                 options={['Alba Iulia', 'Arad', 'Pitești', 'Bacău', 'Oradea', 'Brașov','Cluj-Napoca', 'București', 'Timișoara']}
                                 onChange={(event, newValue) => {setFormData({...formData, city: newValue})}}
                                 renderInput={(params) => <TextField {...params} {...register("city")} required variant="standard" label="City" size="small"/>}
@@ -187,7 +188,6 @@ function NewPatientRegistration() {
                         <Grid item xs={12} sm={6} p={1}>
                             <Autocomplete
                                 disablePortal
-                                id="combo-box-demo"
                                 options={['Alba', 'Arad', 'Argeș', 'Bacău', 'Bihor', 'Brașov','Cluj', 'Ilfov', 'Timiș']}
                                 onChange={(event, newValue) => {setFormData({...formData, county: newValue})}}
                                 renderInput={(params) => <TextField {...params} {...register("county")}  required variant="standard" label="County" size="small"/>}
@@ -201,7 +201,7 @@ function NewPatientRegistration() {
                             <Typography className="error">{errors.phoneNumber?.message}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} p={1}>
-                            <TextField {...register("email")} name="email" type="text" label="E-mail" variant="standard" size="small" fullWidth onChange={handleChange}/>
+                            <TextField {...register("email")} name="email" type="text" label="Email" variant="standard" size="small" fullWidth onChange={handleChange}/>
                             <Typography className="error">{errors.email?.message}</Typography>
                         </Grid>
                         <Grid item xs={12} p={1}>
@@ -253,10 +253,10 @@ function NewPatientRegistration() {
                         </Grid>
                         <Grid item xs={12} sm={12} p={1} mb={3}>
                             <FormControl>
-                            <FormLabel>Allergies</FormLabel>
+                                <FormLabel>Allergies</FormLabel>
                                 <Autocomplete
                                     multiple
-                                    placeholder="Favorites"
+                                    sx={{width: '300px'}}
                                     options={allergens}
                                     renderInput={(params) => <TextField {...params} />}
                                     onChange={(event, newValue) => {setFormData({...formData, allergies: newValue})}}
@@ -266,18 +266,18 @@ function NewPatientRegistration() {
                                         const {inputValue} = params;
                                         const isExisting = options.some((option) => inputValue === option.title);
                                         
-                                        if (inputValue !== '' && !isExisting) {
-                                          filtered.push(inputValue);
+                                        if (inputValue !== '' && !isExisting) 
+                                        {
+                                            filtered.push(inputValue);
                                         }
                                         return filtered;
                                     }}
-                                    sx={{width: '300px'}}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} p={1}>
-                            <Box display='flex' justifyContent='flex-end' sx={{background: 'transparent'}}>
-                                <Button variant="contained" sx={{mr: 2, background: '#00917C'}} type="submit"><SaveIcon sx={{mr: 1}}/>SAVE</Button>
+                            <Box display='flex' justifyContent='flex-end'>
+                                <Button variant="contained" sx={{mr: 2, background: '#8FBDD3'}} type="submit"><SaveIcon sx={{mr: 1}}/>SAVE</Button>
                                 <Button variant="contained" sx={{background: '#F05454'}} onClick={() => {navigate("/patients")}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
                             </Box>
                         </Grid>

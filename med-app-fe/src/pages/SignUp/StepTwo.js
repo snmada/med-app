@@ -1,16 +1,16 @@
 import {React, useState} from 'react'
-import {Grid, Typography, TextField, Box, Alert} from "@mui/material"
+import {Grid, Typography, TextField, Box, Alert} from '@mui/material'
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
-import "./SignUp.css"
+import './SignUp.css'
 import Axios from 'axios'
 
-function StepOne({formData, handleChange, handleNext, handleBack}) {
+function StepTwo({formData, handleChange, handleNext, handleBack}) {
 
     const schema = yup.object().shape({
         uid: yup.string().required("UID is required").min(5, 'Must be exactly 5 digits').max(5, 'Must be exactly 5 digits'),
-    })
+    });
 
     const {register, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(schema),
@@ -19,12 +19,15 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
     const [errorMessage, setErrorMessage] = useState("");
 
     const onSubmit = async () => {
-        try {
+        try 
+        {
             const {status} = await Axios.post('http://localhost:3001/signup/uid',{
                 uid: formData.uid
             });
             status === 200 && handleNext();
-        }catch(error){
+        }
+        catch(error)
+        {
             (error.response.status === 404 || error.response.status === 409)? setErrorMessage(error.response.data) : alert('An error occured on server. Please try again later.');
         }
     };
@@ -42,7 +45,7 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
             </Grid>
             {errorMessage &&  <Alert severity="error" sx={{width: '100%'}}>{errorMessage}</Alert>}
             <Grid item xs={12} pt={2} pb={7}>
-                <Typography sx={{fontSize: '14px', color: '#9d9d9d'}}>Note: Enter your doctor UID (Unique Identifier) to prove that you are part of healthcare system. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Typography>
+                <Typography sx={{fontSize: '14px', color: '#9d9d9d'}}>Note: Enter your doctor UID (Unique Identifier) to prove that you are part of healthcare system.</Typography>
             </Grid>
             <Grid item xs={6} py={2}>
                 <Box xs={6} className="back">
@@ -60,4 +63,4 @@ function StepOne({formData, handleChange, handleNext, handleBack}) {
   )
 }
 
-export default StepOne
+export default StepTwo

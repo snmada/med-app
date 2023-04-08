@@ -1,6 +1,6 @@
 import {React, useState, useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import NavBar  from "../../../components/NavBar/NavBar.js"
+import NavBar  from '../../../components/NavBar/NavBar.js'
 import {Grid, Paper, Typography, TextField, TextareaAutosize, Box, Button, Alert} from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save'
 import CloseIcon from '@mui/icons-material/Close'
@@ -19,17 +19,21 @@ function CreateMedicalRecord() {
     const [patient, setPatient] = useState({});
 
     const date = () => {
-        if(new Date().getDate() < 10 && new Date().getMonth()+1 < 10){
-            return new "0" + Date().getDate()+"/0"+(new Date().getMonth()+1)+"/"+new Date().getFullYear();
+        if(new Date().getDate() < 10 && new Date().getMonth() + 1 < 10)
+        {
+            return "0" + new Date().getDate()+ "/0" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear();
         }
-        else if(new Date().getDate() < 10){
-            return new "0" + Date().getDate()+"/"+(new Date().getMonth()+1)+"/"+new Date().getFullYear();
+        else if(new Date().getDate() < 10)
+        {
+            return "0" + new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear();
         }
-        else if(new Date().getMonth()+1 < 10){
-             return new Date().getDate()+"/0"+(new Date().getMonth()+1)+"/"+new Date().getFullYear();
+        else if(new Date().getMonth() + 1 < 10)
+        {
+             return new Date().getDate() + "/0" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear();
         }
-        else{
-            return new Date().getDate()+"/"+(new Date().getMonth()+1)+"/"+new Date().getFullYear();
+        else
+        {
+            return new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear();
         }
     }
 
@@ -53,7 +57,7 @@ function CreateMedicalRecord() {
             }
         }
         getPatientData();
-    }, []);
+    }, [param.patient_id]);
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -90,7 +94,7 @@ function CreateMedicalRecord() {
     <form onSubmit={onSubmit}>
         <Grid container py={6}>
             <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px'}}>
-                <Paper elevation={20} sx={{width: '850px', padding: '45px 50px'}}>
+                <Paper elevation={5} sx={{width: '850px', padding: '45px 50px'}}>
                     <Grid container>
                         <Grid item xs={12} px={1} style={{marginBottom: '25px', background: '#34626C', display: 'flex', justifyContent: 'center'}}>
                             <Typography sx={{fontSize: '22px', color: '#FBFBFB', p: 2}}>New Medical Record</Typography>
@@ -126,8 +130,8 @@ function CreateMedicalRecord() {
                     </Grid>
                     <Grid container py={2}>
                         <Grid item xs={12} p={1}>
-                            <Box display='flex' justifyContent='flex-end' sx={{background: 'transparent'}}>
-                                <Button variant="contained" sx={{mr: 2, background: '#00917C'}} type="submit"><SaveIcon sx={{mr: 1}}/>SAVE</Button>
+                            <Box display='flex' justifyContent='flex-end'>
+                                <Button variant="contained" sx={{mr: 2, background: '#8FBDD3'}} type="submit"><SaveIcon sx={{mr: 1}}/>SAVE</Button>
                                 <Button variant="contained" sx={{background: '#F05454'}} onClick={() => {navigate(`/patients/profile/${param.patient_id}`)}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
                             </Box>
                         </Grid>

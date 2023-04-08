@@ -1,10 +1,10 @@
 import {React, useState, useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import NavBar  from "../../../components/NavBar/NavBar.js"
-import {Grid, Paper, TextField, Typography, Box, Button, Fab, InputAdornment, FormControl, InputLabel, Select, MenuItem, Accordion, AccordionSummary, AccordionDetails, Autocomplete, createFilterOptions, Tooltip, IconButton, Alert} from '@mui/material'
+import NavBar  from '../../../components/NavBar/NavBar.js'
+import {Grid, Paper, TextField, Typography, Box, Button, InputAdornment, FormControl, InputLabel, Select, MenuItem, Accordion, AccordionSummary, AccordionDetails, Autocomplete, createFilterOptions, Tooltip, IconButton, Alert} from '@mui/material'
 import {DataGrid} from '@mui/x-data-grid'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import AddIcon from '@mui/icons-material/Add'
+import PostAddIcon from '@mui/icons-material/PostAdd';
 import EditIcon from '@mui/icons-material/Edit'
 import * as yup from 'yup'
 import {useForm} from 'react-hook-form'
@@ -27,6 +27,22 @@ function PatientProfile() {
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
+    const [initialCNP, setInitialCNP] = useState("");
+
+    const schema = yup.object().shape({
+        firstName: yup.string().matches(/[a-zA-ZăâîșțĂÂÎȘȚ -]+$/, "Must be only letters"),
+        lastName: yup.string().matches(/[a-zA-ZăâîșțĂÂÎȘȚ -]+$/, "Must be only letters"),
+        cnp: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(13, 'Must be a valid CNP').max(13, 'Must be a valid CNP'),
+        phoneNumber: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Must be exactly 10 digits').max(10, 'Must be exactly 10 digits'),
+        email: yup.string().email("Please use a valid email address"),
+        weight: yup.number().positive().integer().min(30).max(300),
+        height: yup.number().positive().integer().min(30).max(250)
+    });
+
+    const {register, handleSubmit, formState: {errors}} = useForm({
+        resolver: yupResolver(schema),
+    });
+
     useEffect(() => {
         async function getPatient() {
             try
@@ -34,7 +50,17 @@ function PatientProfile() {
                 const response = await Axios.get(`http://localhost:3001/patient/get-patient-data/${param.patient_id}`);
                 if(response)
                 {
+                    const allergies = response.data[0].allergies;
+                    if(allergies.split(', ').length - 1 > 0)
+                    {
+                        response.data[0].allergies = allergies.split(', ');
+                    }
+                    else
+                    {
+                        response.data[0].allergies = allergies.split(',');
+                    }
                     setData(response.data[0]);
+                    setInitialCNP(response.data[0].cnp);
                 }
             }
             catch(error)
@@ -43,7 +69,7 @@ function PatientProfile() {
             }
         }
         getPatient();
-    }, []);
+    }, [param.patient_id]);
 
     useEffect(() => {
         async function getMedicalRecordList() {
@@ -61,7 +87,7 @@ function PatientProfile() {
             }
         }
         getMedicalRecordList();
-    }, []);
+    }, [param.patient_id]);
 
     const handleChange = (e) => {
         if(validateCNP(e.target.name === "cnp" && e.target.value))
@@ -73,20 +99,6 @@ function PatientProfile() {
             setData({...data, [e.target.name]: e.target.value});
         }
     }
-
-    const schema = yup.object().shape({
-        firstName: yup.string().matches(/[a-zăâîșțĂÂÎȘȚ -]+/i, "Must be only letters"),
-        lastName: yup.string().matches(/[a-zăâîșțĂÂÎȘȚ -]+/i, "Must be only letters"),
-        cnp: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(13, 'Must be a valid CNP').max(13, 'Must be a valid CNP'),
-        phoneNumber: yup.string().matches(/^[0-9]+$/, "Must be only digits").min(10, 'Must be exactly 10 digits').max(10, 'Must be exactly 10 digits'),
-        email: yup.string().email("Must be an valid email"),
-        weight: yup.number().positive().integer().min(30).max(300),
-        height: yup.number().positive().integer().min(30).max(250)
-    })
-
-    const {register, handleSubmit, formState: {errors}} = useForm({
-        resolver: yupResolver(schema),
-    });
 
     const validateCNP = (cnp) => {
         if(cnp.length === 13){
@@ -129,7 +141,7 @@ function PatientProfile() {
     const onSubmit = async () => {
         try 
         {
-            const response = await Axios.put(`http://localhost:3001/patient/update-patient/${param.patient_id}`, {data});
+            const response = await Axios.put(`http://localhost:3001/patient/update-patient/${param.patient_id}`, {data, initialCNP: initialCNP});
             if(response.status === 200)
             {
                 setSuccessMessage(response.data);
@@ -155,7 +167,7 @@ function PatientProfile() {
         {field: 'view', headerName: 'Medical Record', width: 130, sortable: false, filterable: false,
             renderCell: (cellValues) => {
                 return (
-                    <Button variant="contained" sx={{background: '#f8dc81', color: 'black', "&:hover":{background: '#5B8FB9', color: '#FFFFFF'}}} onClick={() => {navigate(`/patients/view-medical-record/${param.patient_id}/` + cellValues.id)}}>View</Button>
+                    <Button variant="contained" sx={{background: '#FFE69A', color: 'black', "&:hover":{color: '#FBFBFB'}}} onClick={() => {navigate(`/patients/view-medical-record/${param.patient_id}/` + cellValues.id)}}>View</Button>
                 )
             },
         },
@@ -171,7 +183,7 @@ function PatientProfile() {
     const optionsRHFactor = [
         {value: "-/negative"},
         {value: "+/positive"}
-    ]
+    ];
 
   return (
     <>
@@ -183,19 +195,25 @@ function PatientProfile() {
                     {successMessage && <Alert severity="success" sx={{width: '100%'}}>{successMessage}</Alert>}
                     {errorMessage && <Alert severity="error" sx={{width: '100%'}}>{errorMessage}</Alert>}
                     {editMode &&
-                        <Grid container sx={{p: 1, mb: 3, mt:1, borderRadius: '5px'}}>
+                        <Grid container sx={{p: 1, mb: 3, mt: 1}}>
                             <Grid item xs={6} p={1}>
-                                <Typography sx={{fontSize: '22px', fontWeight: 500, color: 'orange', leterSpacing: '9px'}}>EDIT MODE</Typography>
+                                <Typography sx={{fontSize: '22px', fontWeight: 500, leterSpacing: '9px'}}>EDIT MODE</Typography>
                             </Grid>
                             <Grid item xs={6} p={1}>
                                 <Box display='flex' justifyContent='flex-end'>
-                                    <Button type="submit" variant="contained"  sx={{mr: 2, background: '#00917C'}}><SaveIcon sx={{mr: 1}}/>SAVE</Button>
-                                    <Button variant="contained" color="primary" sx={{background: '#F05454'}} onClick={() => {setEditMode(false)}}><CloseIcon sx={{mr: 1}}/>CANCEL</Button>
+                                    <Button type="submit" variant="contained"  sx={{mr: 2, background: '#8FBDD3'}}><SaveIcon sx={{mr: 1}}/>SAVE</Button>
+                                    <Button variant="contained" color="primary" sx={{background: '#F05454'}} 
+                                        onClick={() => {
+                                            setEditMode(false);
+                                            setErrorMessage(false);
+                                            setSuccessMessage(false)}}>
+                                        <CloseIcon sx={{mr: 1}}/>CANCEL
+                                    </Button>
                                 </Box>
                             </Grid>
                         </Grid>
                     }
-                    <Grid container sx={{background: '#FFFFFF', display: 'flex', py:1}}>
+                    <Grid container sx={{display: 'flex', py:1}}>
                         {
                             editMode? (
                                 <>
@@ -223,7 +241,7 @@ function PatientProfile() {
                             )
                         }
                     </Grid>
-                    <Grid container sx={{background: '#FFFFFF', display: 'flex', pb:2}}>
+                    <Grid container sx={{display: 'flex', pb:2}}>
                         <Grid item xs={12} md={3} p={1}>
                             {editMode?  (<><TextField {...register("cnp")} required name="cnp" type="text" label="CNP" variant="outlined"  fullWidth value={data.cnp} onChange={handleChange}/>
                                            <Typography className="error">{errors.cnp?.message}</Typography></>)
@@ -293,7 +311,7 @@ function PatientProfile() {
                                             <Typography sx={{fontSize: '14px'}}>{data.rhFactor}</Typography></>)}
                         </Grid>
                     </Grid>
-                    <Grid container sx={{background: '#FFFFFF'}}>
+                    <Grid container sx={{background: '#FBFBFB'}}>
                         <Accordion sx={{width: '100%'}}>
                             <AccordionSummary expandIcon={<ExpandMoreIcon/>} sx={{background: '#EEEEEE'}}>
                                 <Typography>Further Details</Typography>
@@ -316,9 +334,9 @@ function PatientProfile() {
                                                         <Typography sx={{fontSize: '14px'}}>{data.floor}</Typography></>)}
                                     </Grid>
                                     <Grid item xs={12} md={4} p={1}>
-                                        {editMode?  (<TextField {...register("appartment")} name="appartment" type="text" label="Appartment" variant="outlined" value={data.appartment} fullWidth onChange={handleChange}/>)
-                                                    :(<><Typography  sx={{fontSize: '16px'}}>Appartment</Typography>
-                                                        <Typography sx={{fontSize: '14px'}}>{data.appartment}</Typography></>)}
+                                        {editMode?  (<TextField {...register("apartment")} name="apartment" type="text" label="Apartment" variant="outlined" value={data.apartment} fullWidth onChange={handleChange}/>)
+                                                    :(<><Typography  sx={{fontSize: '16px'}}>Apartment</Typography>
+                                                        <Typography sx={{fontSize: '14px'}}>{data.apartment}</Typography></>)}
                                     </Grid>
                                     <Grid item xs={12} md={4} p={1}>
                                         {editMode?  (<Autocomplete
@@ -339,7 +357,6 @@ function PatientProfile() {
                                         {editMode?  (<Autocomplete
                                                         disablePortal
                                                         freeSolo
-                                                        id="combo-box-demo"
                                                         value={data.county || ''}
                                                         inputValue={data.county || ''}
                                                         options={['Alba', 'Arad', 'Argeș', 'Bacău', 'Bihor', 'Brașov','Cluj', 'Ilfov', 'Timiș']}
@@ -357,9 +374,9 @@ function PatientProfile() {
                                                         <Typography sx={{fontSize: '14px'}}>{data.phoneNumber}</Typography></>)}
                                     </Grid>
                                     <Grid item xs={12} md={4} p={1}>
-                                        {editMode?  (<> <TextField {...register("email")} required name="email" type="text" label="Email" variant="outlined" fullWidth value={data.email} onChange={handleChange}/>
+                                        {editMode?  (<> <TextField {...register("email")} name="email" type="text" label="Email" variant="outlined" fullWidth value={data.email} onChange={handleChange}/>
                                                         <Typography className="error">{errors.email?.message}</Typography></>)
-                                                    :(<><Typography  sx={{fontSize: '16px'}}>E-mail</Typography>
+                                                    :(<><Typography  sx={{fontSize: '16px'}}>Email</Typography>
                                                         <Typography sx={{fontSize: '14px'}}>{data.email}</Typography></>)}
                                     </Grid>
                                     <Grid item xs={12} md={4} p={1}>
@@ -380,25 +397,27 @@ function PatientProfile() {
                                     <FormControl>
                                         <Autocomplete
                                             multiple
+                                            sx={{width: '600px'}}
                                             options={allergens}
-                                            value={data.allergies.split(',') || []}
+                                            value={data.allergies || []}
                                             renderInput={(params) => <TextField {...params} />}
                                             onChange={(event, newValue) => {setData({...data, allergies: newValue})}}
                                                    
                                             filterOptions={(options, params) => {
                                                 const filtered = filter(options, params);
-                                                const { inputValue } = params;
+                                                const {inputValue} = params;
                                                 const isExisting = options.some((option) => inputValue === option.title);
                                                         
-                                                if (inputValue !== '' && !isExisting) {
+                                                if (inputValue !== '' && !isExisting) 
+                                                {
                                                     filtered.push(inputValue);
                                                 }
-                                                    return filtered;
+                                                return filtered;
                                             }}
-                                            sx={{width: '600px'}}/>
+                                        />
                                     </FormControl>
                                     </>
-                                    ):(<Typography sx={{fontSize: '14px'}}>{data.allergies || ''}</Typography>)
+                                    ):(<Typography sx={{fontSize: '14px'}}>{data.allergies? Array.isArray(data.allergies) && data.allergies.length > 1 ? data.allergies.join(', ') : data.allergies : ''}</Typography>)
                                 }
                             </AccordionDetails>
                         </Accordion>
@@ -409,9 +428,7 @@ function PatientProfile() {
                             <AccordionDetails>
                                 <Box display='flex' justifyContent='flex-end' py={2}>
                                     <Tooltip title="Add new medical record">
-                                        <Fab sx={{background: '#AAD8D3'}} size="small" onClick={()=>{navigate(`/patients/new-medical-record/${param.patient_id}`)}}>
-                                            <AddIcon /> 
-                                        </Fab>
+                                        <Button onClick={()=>{navigate(`/patients/new-medical-record/${param.patient_id}`)}}><PostAddIcon sx={{color: '#056676', fontSize: '2rem'}}/></Button>
                                     </Tooltip>
                                 </Box>
                                 <Grid item>
