@@ -7,7 +7,8 @@ router.post("/email", (req, res) => {
     db.query(
         "SELECT * FROM doctor_account WHERE email = ?", req.body.email,
         (error, result) => {
-            if(error){
+            if(error)
+            {
                 res.status(500).send();
             }
             else
@@ -22,7 +23,8 @@ router.post("/uid", (req, res) => {
     db.query(
         "SELECT * FROM doctor WHERE doctor_id = ?", req.body.uid,
         (error, result) => {
-            if(error){
+            if(error)
+            {
                 res.status(500).send();
             }
             else
@@ -32,10 +34,12 @@ router.post("/uid", (req, res) => {
                     db.query(
                         "SELECT * FROM doctor_account WHERE doctor_id = ?", req.body.uid,
                         (error, result) => {
-                            if(error){
+                            if(error)
+                            {
                                 res.status(500).send();
                             }
-                            else{
+                            else
+                            {
                                 !result.length? res.status(200).send() : res.status(409).send('Account already exists');
                             }
                         }
@@ -52,7 +56,8 @@ router.post("/uid", (req, res) => {
 
 router.post('/user-sign-up', (req, res) => {
     bcrypt.hash(req.body.password, 10, (error, hash) => {
-        if(error){
+        if(error)
+        {
             res.status(500).send();
         }
         else 
@@ -61,7 +66,8 @@ router.post('/user-sign-up', (req, res) => {
                 "INSERT INTO doctor_account (doctor_id, lastname, firstname, email, password) VALUES (?, ?, ?, ?, ?)",
                 [req.body.uid, req.body.lastName, req.body.firstName, req.body.email, hash],
                 (error, result) => {
-                    if(error){
+                    if(error)
+                    {
                         res.status(500).send();
                     }
                     else

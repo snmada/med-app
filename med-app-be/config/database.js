@@ -9,10 +9,12 @@ const db =  mysql.createConnection({
 });
 
 db.connect(function(error){
-    if(error){
+    if(error)
+    {
         console.error("Error connecting to database -> ", error);
     }
-    else{
+    else
+    {
         console.log("\x1b[32m%s\x1b[0m", "Connected to database...");
     }
 });
