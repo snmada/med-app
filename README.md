@@ -12,6 +12,3 @@ The application also allows doctors to view a complete list of medical records f
 - Node.js
 - Express
 - MySQL
-
-
-Link to Wireframe: https://www.figma.com/file/SkwRV8LLARa3yYxWbSmRMw/MED?node-id=0%3A1&t=RwQVQClHdeeaNDHM-1
